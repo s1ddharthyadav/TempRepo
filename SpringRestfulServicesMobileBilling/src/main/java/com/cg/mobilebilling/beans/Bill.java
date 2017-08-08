@@ -9,27 +9,26 @@ import javax.persistence.ManyToOne;
 
 @Entity
 public class Bill {
-	
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int billID; 
 	private int noOfLocalSMS, noOfStdSMS, noOfLocalCalls, noOfStdCalls, internetDataUsageUnits;
 	private String billMonth;
-	private float totalBillAmount, localSMSAmount, stdSMSAmount, localCallAmount, stdCallAmount, internetDataUsageAmount, servicesTax, vat;
+	private float totalBillAmount, localSMSAmount, stdSMSAmount, localCallAmount, stdCallAmount, internetDataUsageAmount, gst;
 
 	@ManyToOne
 	private PostpaidAccount postpaidaccount;
-	
+
 	public Bill() {
 		super();
 	}
 
-	public Bill(int billID, int noOfLocalSMS, int noOfStdSMS, int noOfLocalCalls, int noOfStdCalls,
+	public Bill(int noOfLocalSMS, int noOfStdSMS, int noOfLocalCalls, int noOfStdCalls,
 			int internetDataUsageUnits, String billMonth, float totalBillAmount, float localSMSAmount,
 			float stdSMSAmount, float localCallAmount, float stdCallAmount, float internetDataUsageAmount,
-			float servicesTax, float vat, PostpaidAccount postpaidaccount) {
+			float gst, PostpaidAccount postpaidaccount) {
 		super();
-		this.billID = billID;
 		this.noOfLocalSMS = noOfLocalSMS;
 		this.noOfStdSMS = noOfStdSMS;
 		this.noOfLocalCalls = noOfLocalCalls;
@@ -42,9 +41,29 @@ public class Bill {
 		this.localCallAmount = localCallAmount;
 		this.stdCallAmount = stdCallAmount;
 		this.internetDataUsageAmount = internetDataUsageAmount;
-		this.servicesTax = servicesTax;
-		this.vat = vat;
+		this.gst=gst;
 		this.postpaidaccount = postpaidaccount;
+	}
+	
+	
+
+	public Bill(int noOfLocalSMS, int noOfStdSMS, int noOfLocalCalls, int noOfStdCalls,
+			int internetDataUsageUnits, String billMonth, float totalBillAmount, float localSMSAmount,
+			float stdSMSAmount, float localCallAmount, float stdCallAmount, float internetDataUsageAmount, float gst) {
+		super();
+		this.noOfLocalSMS = noOfLocalSMS;
+		this.noOfStdSMS = noOfStdSMS;
+		this.noOfLocalCalls = noOfLocalCalls;
+		this.noOfStdCalls = noOfStdCalls;
+		this.internetDataUsageUnits = internetDataUsageUnits;
+		this.billMonth = billMonth;
+		this.totalBillAmount = totalBillAmount;
+		this.localSMSAmount = localSMSAmount;
+		this.stdSMSAmount = stdSMSAmount;
+		this.localCallAmount = localCallAmount;
+		this.stdCallAmount = stdCallAmount;
+		this.internetDataUsageAmount = internetDataUsageAmount;
+		this.gst = gst;
 	}
 
 	public int getBillID() {
@@ -151,20 +170,12 @@ public class Bill {
 		this.internetDataUsageAmount = internetDataUsageAmount;
 	}
 
-	public float getServicesTax() {
-		return servicesTax;
+	public float getGst() {
+		return gst;
 	}
 
-	public void setServicesTax(float servicesTax) {
-		this.servicesTax = servicesTax;
-	}
-
-	public float getVat() {
-		return vat;
-	}
-
-	public void setVat(float vat) {
-		this.vat = vat;
+	public void setGst(float gst) {
+		this.gst = gst;
 	}
 
 	public PostpaidAccount getPostpaidaccount() {

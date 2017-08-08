@@ -15,7 +15,6 @@ import com.cg.mobilebilling.beans.PostpaidAccount;
 import com.cg.mobilebilling.beans.StandardPlan;
 import com.cg.mobilebilling.exceptions.BillingServicesDownException;
 import com.cg.mobilebilling.exceptions.PlanDetailsNotFoundException;
-import com.cg.mobilebilling.exceptions.PostpaidAccountNotFoundException;
 
 
 @Repository
@@ -47,18 +46,19 @@ public class BillingDAOServicesImpl implements BillingDAOServices {
 	}
 
 	@Override
-	public int insertMonthlybill(int customerID, long mobileNo, Bill bill) {
+	public Bill insertMonthlybill(int customerID, long mobileNo, Bill bill) {
 		PostpaidAccount postpaid=em.find(PostpaidAccount.class, mobileNo);
 		bill.setPostpaidaccount(postpaid);
 		em.persist(bill);
 		postpaid.setBills(bill);
-		return bill.getBillID();
+		return bill;
 	}
 
 	@Override
-	public int insertPlan(Plan plan) throws PlanDetailsNotFoundException {
-		// TODO Auto-generated method stub
-		return 0;
+	public StandardPlan insertPlan(StandardPlan plan) throws PlanDetailsNotFoundException {
+		em.persist(plan);
+		em.flush();
+		return plan;
 	}
 
 	@Override
@@ -104,9 +104,9 @@ public class BillingDAOServicesImpl implements BillingDAOServices {
 	}
 
 	@Override
-	public StandardPlan getPlan(int planID) {
-		// TODO Auto-generated method stub
-		return null;
+	public StandardPlan getsPlan(int planID) {
+		StandardPlan sPlan= em.find(StandardPlan.class, planID);
+		return sPlan;
 	}
 
 	@Override
@@ -116,8 +116,7 @@ public class BillingDAOServicesImpl implements BillingDAOServices {
 	}
 
 	public PostpaidAccount getPlanDetails(int customerID, long mobileNo) {
-		// TODO Auto-generated method stub
-		PostpaidAccount plan=	em.find(PostpaidAccount.class, mobileNo);
+		PostpaidAccount plan=em.find(PostpaidAccount.class, mobileNo);
 		return plan;
 	}
 
@@ -125,5 +124,19 @@ public class BillingDAOServicesImpl implements BillingDAOServices {
 	public boolean deleteCustomer(int customerID) {
 		em.remove(getCustomer(customerID));
 		return true;
+	}
+
+	@Override
+	public Plan insertPlan(Plan plan) throws PlanDetailsNotFoundException {
+		// TODO Auto-generated method stub
+		em.persist(plan);
+		em.flush();
+		return plan;
+	}
+
+	@Override
+	public Plan getPlan(int planID) {
+		Plan plan= em.find(Plan.class, planID);
+		return plan;
 	}
 }

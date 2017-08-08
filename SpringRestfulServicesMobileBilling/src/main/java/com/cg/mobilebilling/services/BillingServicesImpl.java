@@ -24,7 +24,7 @@ public class BillingServicesImpl implements BillingServices {
 
 	@Autowired
 	BillingDAOServices dao;
-	
+
 	@Override
 	public List<Plan> getPlanAllDetails() throws BillingServicesDownException {
 		// TODO Auto-generated method stub
@@ -34,22 +34,44 @@ public class BillingServicesImpl implements BillingServices {
 	@Override
 	public Customer acceptCustomerDetails(Customer customer) throws BillingServicesDownException {
 		return dao.insertCustomer(customer);
-				
+
 	}
 
 	@Override
 	public long openPostpaidMobileAccount(int customerID, int planID)
 			throws PlanDetailsNotFoundException, CustomerDetailsNotFoundException, BillingServicesDownException {
-		return 0;
+
+		StandardPlan sPlan= dao.getsPlan(planID);
+		Plan plan= new Plan(sPlan.getPlanID(), sPlan.getMonthlyRental(), sPlan.getFreeLocalCalls(), sPlan.getFreeStdCalls(), sPlan.getFreeLocalSMS(), sPlan.getFreeStdSMS(), sPlan.getFreeInternetDataUsageUnits(), sPlan.getLocalCallRate(), sPlan.getStdCallRate(), sPlan.getLocalSMSRate(), sPlan.getStdSMSRate(), sPlan.getInternetDataUsageRate(),sPlan.getPlanCircle(), sPlan.getPlanName());
+		PostpaidAccount account = new PostpaidAccount();
+		account.setPlan(plan);
+		return dao.insertPostPaidAccount(customerID, account);
 	}
 
 	@Override
-	public int generateMonthlyMobileBill(int customerID, long mobileNo, String billMonth, int noOfLocalSMS,
+	public Bill generateMonthlyMobileBill(int customerID, long mobileNo, String billMonth, int noOfLocalSMS,
 			int noOfStdSMS, int noOfLocalCalls, int noOfStdCalls, int internetDataUsageUnits)
 					throws CustomerDetailsNotFoundException, PostpaidAccountNotFoundException, InvalidBillMonthException,
-					BillingServicesDownException, PlanDetailsNotFoundException {
-		// TODO Auto-generated method stub
-		return 0;
+					BillingServicesDownException, PlanDetailsNotFoundException
+	{	
+		PostpaidAccount p= dao.getPlanDetails(customerID, mobileNo);
+		int BillednoOfLocalSMS = (noOfLocalSMS-p.getPlan().getFreeLocalSMS());
+		int BillednoOfStdSMS = (noOfStdSMS-p.getPlan().getFreeStdSMS());
+		int BillednoOfLocalCalls = (noOfLocalCalls-p.getPlan().getFreeLocalCalls());
+		int BillednoOfStdCalls = (noOfStdCalls-p.getPlan().getFreeStdCalls());
+		int BilledinternetDataUsageUnits = (internetDataUsageUnits-p.getPlan().getFreeInternetDataUsageUnits());
+		float localCallAmount= BillednoOfLocalCalls*p.getPlan().getLocalCallRate();
+		float StdCallAmount = BillednoOfStdCalls*p.getPlan().getStdCallRate();
+		float LocalSMSAmount= BillednoOfLocalSMS*p.getPlan().getLocalSMSRate();
+		float StdSMSAmount = BillednoOfStdSMS*p.getPlan().getStdSMSRate();
+		float internetAmount = BilledinternetDataUsageUnits*p.getPlan().getInternetDataUsageRate();
+		float gst= 0.30f;
+		float Amount= localCallAmount+StdCallAmount+LocalSMSAmount+StdSMSAmount+internetAmount; 
+		float gstAmount=  Amount*gst;
+		float TotalBillAmount= Amount+gstAmount;
+
+		Bill bill=new Bill(BillednoOfLocalSMS, BillednoOfStdSMS, BillednoOfLocalCalls, BillednoOfStdCalls, internetDataUsageUnits, billMonth, TotalBillAmount, LocalSMSAmount, StdSMSAmount, localCallAmount, StdCallAmount, internetAmount, gstAmount);
+		return dao.insertMonthlybill(customerID, mobileNo, bill);
 	}
 
 	@Override
@@ -122,6 +144,12 @@ public class BillingServicesImpl implements BillingServices {
 			PlanDetailsNotFoundException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public StandardPlan insertPlan(StandardPlan plan) throws PlanDetailsNotFoundException {
+		// TODO Auto-generated method stub
+		return dao.insertPlan(plan);
 	}
 
 }

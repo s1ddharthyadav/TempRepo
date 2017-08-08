@@ -5,6 +5,7 @@ import com.cg.mobilebilling.beans.Bill;
 import com.cg.mobilebilling.beans.Customer;
 import com.cg.mobilebilling.beans.Plan;
 import com.cg.mobilebilling.beans.PostpaidAccount;
+import com.cg.mobilebilling.beans.StandardPlan;
 import com.cg.mobilebilling.exceptions.BillDetailsNotFoundException;
 import com.cg.mobilebilling.exceptions.BillingServicesDownException;
 import com.cg.mobilebilling.exceptions.CustomerDetailsNotFoundException;
@@ -15,13 +16,15 @@ public interface BillingServices {
 	
 	List<Plan> getPlanAllDetails() throws BillingServicesDownException;
 	
+	StandardPlan insertPlan(StandardPlan plan) throws PlanDetailsNotFoundException;
+	
 	Customer acceptCustomerDetails(Customer customer) throws BillingServicesDownException;
 
 	long openPostpaidMobileAccount(int customerID, int planID) 
 			throws PlanDetailsNotFoundException,CustomerDetailsNotFoundException,
 			BillingServicesDownException;
 	
-	int  generateMonthlyMobileBill(int customerID, long mobileNo, String billMonth, int noOfLocalSMS, int noOfStdSMS, int noOfLocalCalls, int noOfStdCalls,int internetDataUsageUnits) 
+	Bill  generateMonthlyMobileBill(int customerID, long mobileNo, String billMonth, int noOfLocalSMS, int noOfStdSMS, int noOfLocalCalls, int noOfStdCalls,int internetDataUsageUnits) 
 			throws CustomerDetailsNotFoundException, PostpaidAccountNotFoundException, 
 			InvalidBillMonthException, BillingServicesDownException, 
 			PlanDetailsNotFoundException;
