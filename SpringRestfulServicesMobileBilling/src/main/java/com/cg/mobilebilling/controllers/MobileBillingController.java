@@ -33,6 +33,7 @@ public class MobileBillingController {
 	
 	@RequestMapping(value="/acceptCustomerDetail",method=RequestMethod.POST,consumes=MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 	public ResponseEntity<String>acceptProductDetail(@ModelAttribute Customer customer) throws BillingServicesDownException{
+	
 		services.acceptCustomerDetails(customer);
 		return new ResponseEntity<>("Customer details succesfully added",HttpStatus.OK);
 		

@@ -15,10 +15,8 @@ public interface BillingServices {
 	
 	List<Plan> getPlanAllDetails() throws BillingServicesDownException;
 	
-	int acceptCustomerDetails(String firstName, String lastName, String emailID, String dateOfBirth, String billingAddressCity, String billingAddressState, int billingAddressPinCode, String homeAddressCity, String homeAddressState, int homeAddressPinCode) throws BillingServicesDownException;
+	Customer acceptCustomerDetails(Customer customer) throws BillingServicesDownException;
 
-	int acceptCustomerDetails(Customer customer);
-	
 	long openPostpaidMobileAccount(int customerID, int planID) 
 			throws PlanDetailsNotFoundException,CustomerDetailsNotFoundException,
 			BillingServicesDownException;

@@ -1,10 +1,12 @@
 package com.cg.mobilebilling.beans;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Entity
 public class StandardPlan {
 	
+	@Id
 	private int planID;
 	private int monthlyRental, freeLocalCalls, freeStdCalls, freeLocalSMS, freeStdSMS, freeInternetDataUsageUnits;
 	private float localCallRate, stdCallRate, localSMSRate, stdSMSRate, internetDataUsageRate;

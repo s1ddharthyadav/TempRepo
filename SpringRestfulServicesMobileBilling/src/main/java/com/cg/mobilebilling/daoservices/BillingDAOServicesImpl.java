@@ -2,26 +2,42 @@ package com.cg.mobilebilling.daoservices;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+
+import org.springframework.stereotype.Repository;
+
 import com.cg.mobilebilling.beans.Bill;
 import com.cg.mobilebilling.beans.Customer;
 import com.cg.mobilebilling.beans.Plan;
 import com.cg.mobilebilling.beans.PostpaidAccount;
+import com.cg.mobilebilling.beans.StandardPlan;
 import com.cg.mobilebilling.exceptions.BillingServicesDownException;
 import com.cg.mobilebilling.exceptions.PlanDetailsNotFoundException;
+import com.cg.mobilebilling.exceptions.PostpaidAccountNotFoundException;
 
 
+@Repository
 public class BillingDAOServicesImpl implements BillingDAOServices {
 
+	@PersistenceContext
+	private EntityManager em;
+
 	@Override
-	public int insertCustomer(Customer customer) throws BillingServicesDownException {
-		// TODO Auto-generated method stub
-		return 0;
+	public Customer insertCustomer(Customer customer) throws BillingServicesDownException {
+		em.persist(customer);
+		em.flush();
+		return customer;
 	}
 
 	@Override
 	public long insertPostPaidAccount(int customerID, PostpaidAccount account) {
-		// TODO Auto-generated method stub
-		return 0;
+		Customer customer=em.find(Customer.class,customerID);
+		account.setCustomer(customer);
+		em.persist(account);
+		customer.setPostpaidAccounts(account);
+		return account.getMobileNo();
 	}
 
 	@Override
@@ -32,8 +48,11 @@ public class BillingDAOServicesImpl implements BillingDAOServices {
 
 	@Override
 	public int insertMonthlybill(int customerID, long mobileNo, Bill bill) {
-		// TODO Auto-generated method stub
-		return 0;
+		PostpaidAccount postpaid=em.find(PostpaidAccount.class, mobileNo);
+		bill.setPostpaidaccount(postpaid);
+		em.persist(bill);
+		postpaid.setBills(bill);
+		return bill.getBillID();
 	}
 
 	@Override
@@ -68,14 +87,14 @@ public class BillingDAOServicesImpl implements BillingDAOServices {
 
 	@Override
 	public Customer getCustomer(int customerID) {
-		// TODO Auto-generated method stub
-		return null;
+		Customer customer = em.find(Customer.class,customerID);
+		return customer;
 	}
 
 	@Override
 	public List<Customer> getAllCustomers() {
-		// TODO Auto-generated method stub
-		return null;
+		TypedQuery<Customer> query = em.createQuery("select c from Customer c",Customer.class);
+		return query.getResultList(); 
 	}
 
 	@Override
@@ -85,7 +104,7 @@ public class BillingDAOServicesImpl implements BillingDAOServices {
 	}
 
 	@Override
-	public Plan getPlan(int planID) {
+	public StandardPlan getPlan(int planID) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -96,16 +115,15 @@ public class BillingDAOServicesImpl implements BillingDAOServices {
 		return null;
 	}
 
-	@Override
-	public Plan getPlanDetails(int customerID, long mobileNo) {
+	public PostpaidAccount getPlanDetails(int customerID, long mobileNo) {
 		// TODO Auto-generated method stub
-		return null;
+		PostpaidAccount plan=	em.find(PostpaidAccount.class, mobileNo);
+		return plan;
 	}
 
 	@Override
 	public boolean deleteCustomer(int customerID) {
-		// TODO Auto-generated method stub
-		return false;
+		em.remove(getCustomer(customerID));
+		return true;
 	}
-	
 }
