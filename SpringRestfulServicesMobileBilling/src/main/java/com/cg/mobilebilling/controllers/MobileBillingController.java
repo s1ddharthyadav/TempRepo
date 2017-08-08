@@ -34,7 +34,6 @@ public class MobileBillingController {
 	@RequestMapping(value="/acceptCustomerDetail",method=RequestMethod.POST,consumes=MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 	public ResponseEntity<String>acceptProductDetail(@ModelAttribute Customer customer) throws BillingServicesDownException{
 		services.acceptCustomerDetails(customer);
-		//productMap.put(product.getProductCode(),product);
 		return new ResponseEntity<>("Customer details succesfully added",HttpStatus.OK);
 		
 	}
@@ -60,11 +59,4 @@ public class MobileBillingController {
 		return new ResponseEntity<>("Customer details succesfully deleted",HttpStatus.OK);
 		
 	}
-	
-	/*@RequestMapping(value={"/allCustomerDetailsJSON"},headers="Accept=application/json")
-	public ResponseEntity<ArrayList<Customer>> getAllCustomerJSON() throws CustomerDetailsNotFoundException{
-		ArrayList<Customer> custList= new ArrayList<>(lue());
-		return new ResponseEntity<>(custList,HttpStatus.OK);
-	}*/
-	
 }

@@ -1,14 +1,24 @@
 package com.cg.mobilebilling.beans;
+
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class Address {
+
 	private int pinCode;
 	private String city, state;
-	public Address() {}
+	
+	public Address() {
+		super();
+	}
+
 	public Address(int pinCode, String city, String state) {
 		super();
 		this.pinCode = pinCode;
 		this.city = city;
 		this.state = state;
 	}
+	
 	public int getPinCode() {
 		return pinCode;
 	}
@@ -27,6 +37,7 @@ public class Address {
 	public void setState(String state) {
 		this.state = state;
 	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -36,6 +47,7 @@ public class Address {
 		result = prime * result + ((state == null) ? 0 : state.hashCode());
 		return result;
 	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -59,6 +71,7 @@ public class Address {
 			return false;
 		return true;
 	}
+	
 	@Override
 	public String toString() {
 		return "Address pinCode=" + pinCode + ", city=" + city + ", state="

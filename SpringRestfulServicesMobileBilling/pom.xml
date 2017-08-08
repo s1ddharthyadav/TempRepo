@@ -1,22 +1,22 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.cg</groupId>
-  <artifactId>SpringRestfulServicesMobileBilling</artifactId>
-  <packaging>war</packaging>
-  <version>0.0.1-SNAPSHOT</version>
-  <name>SpringRestfulServicesMobileBilling Maven Webapp</name>
-  <url>http://maven.apache.org</url>
-  <dependencies>
-  
-    <!-- Junit Dependency -->
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.cg</groupId>
+	<artifactId>SpringRestfulServicesMobileBilling</artifactId>
+	<packaging>war</packaging>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>SpringRestfulServicesMobileBilling Maven Webapp</name>
+	<url>http://maven.apache.org</url>
+	<dependencies>
+
+		<!-- Junit Dependency -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<!-- WADL Dependency -->
 		<dependency>
 			<groupId>org.jvnet.ws.wadl</groupId>
@@ -47,9 +47,49 @@
 			<artifactId>spring-core</artifactId>
 			<version>4.1.4.RELEASE</version>
 		</dependency>
-		
-  </dependencies>
-  <build>
-    <finalName>SpringRestfulServicesMobileBilling</finalName>
-  </build>
+
+		<!-- JPA -->
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>4.0.1.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>4.2.0.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate.common</groupId>
+			<artifactId>hibernate-commons-annotations</artifactId>
+			<version>4.0.1.Final</version>
+			<classifier>tests</classifier>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate.javax.persistence</groupId>
+			<artifactId>hibernate-jpa-2.0-api</artifactId>
+			<version>1.0.1.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>4.0.1.Final</version>
+		</dependency>
+
+	<!-- ojdbc6 -->
+
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>ojdbc6</artifactId>
+			<version>11.2.0</version>
+			<scope>system</scope>
+			<systemPath>C:\oraclexe\app\oracle\product\11.2.0\server\jdbc\lib\ojdbc6.jar</systemPath>
+		</dependency>
+
+	</dependencies>
+	<build>
+		<finalName>SpringRestfulServicesMobileBilling</finalName>
+	</build>
 </project>
