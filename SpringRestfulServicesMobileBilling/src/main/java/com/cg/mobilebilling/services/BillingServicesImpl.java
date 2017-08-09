@@ -19,7 +19,7 @@ import com.cg.mobilebilling.exceptions.PlanDetailsNotFoundException;
 import com.cg.mobilebilling.exceptions.PostpaidAccountNotFoundException;
 
 @Service
-@Transactional
+@Transactional/* (noRollbackFor=Exception.class)*/
 public class BillingServicesImpl implements BillingServices {
 
 	@Autowired
@@ -98,23 +98,21 @@ public class BillingServicesImpl implements BillingServices {
 	public List<PostpaidAccount> getCustomerAllPostpaidAccountsDetails(int customerID)
 			throws CustomerDetailsNotFoundException, BillingServicesDownException {
 		// TODO Auto-generated method stub
-		return null;
+		return dao.getCustomerPostPaidAccounts(customerID);
 	}
 
 	@Override
 	public Bill getMobileBillDetails(int customerID, long mobileNo, String billMonth)
 			throws CustomerDetailsNotFoundException, PostpaidAccountNotFoundException, InvalidBillMonthException,
 			BillDetailsNotFoundException, BillingServicesDownException {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.getMonthlyBill(customerID, mobileNo, billMonth);
 	}
 
 	@Override
 	public List<Bill> getCustomerPostPaidAccountAllBillDetails(int customerID, long mobileNo)
 			throws CustomerDetailsNotFoundException, PostpaidAccountNotFoundException, BillingServicesDownException,
 			BillDetailsNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.getCustomerPostPaidAccountAllBills(customerID, mobileNo);
 	}
 
 	@Override
@@ -127,14 +125,14 @@ public class BillingServicesImpl implements BillingServices {
 	@Override
 	public boolean closeCustomerPostPaidAccount(int customerID, long mobileNo)
 			throws CustomerDetailsNotFoundException, PostpaidAccountNotFoundException, BillingServicesDownException {
-		// TODO Auto-generated method stub
-		return false;
+		
+		return dao.deletePostPaidAccount(customerID, mobileNo);
 	}
 
 	@Override
 	public boolean deleteCustomer(int customerID)
 			throws BillingServicesDownException, CustomerDetailsNotFoundException {
-		// TODO Auto-generated method stub
+		dao.deleteCustomer(customerID);
 		return false;
 	}
 

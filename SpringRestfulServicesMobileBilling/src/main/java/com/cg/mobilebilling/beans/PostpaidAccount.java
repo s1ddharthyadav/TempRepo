@@ -6,12 +6,15 @@ import java.util.Map;
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class PostpaidAccount {
@@ -23,11 +26,12 @@ public class PostpaidAccount {
 	@Embedded
 	private Plan plan;
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="customerID")
 	private Customer customer;
 
-	@OneToMany(mappedBy = "postpaidaccount" , cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "postpaidaccount" ,fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Map<Integer, Bill> bills = new HashMap<>();
 	
 	public PostpaidAccount() {
@@ -76,5 +80,10 @@ public class PostpaidAccount {
 
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
-	}	
+	}
+
+	@Override
+	public String toString() {
+		return "PostpaidAccount [mobileNo=" + mobileNo + ", plan=" + plan + "]";
+	}
 }

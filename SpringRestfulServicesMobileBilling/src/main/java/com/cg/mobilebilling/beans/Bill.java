@@ -5,9 +5,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
+
+
 public class Bill {
 
 	@Id
@@ -17,6 +20,7 @@ public class Bill {
 	private String billMonth;
 	private float totalBillAmount, localSMSAmount, stdSMSAmount, localCallAmount, stdCallAmount, internetDataUsageAmount, gst;
 
+	@JsonIgnore
 	@ManyToOne
 	private PostpaidAccount postpaidaccount;
 
@@ -184,5 +188,15 @@ public class Bill {
 
 	public void setPostpaidaccount(PostpaidAccount postpaidaccount) {
 		this.postpaidaccount = postpaidaccount;
+	}
+
+	@Override
+	public String toString() {
+		return "Bill [billID=" + billID + ", noOfLocalSMS=" + noOfLocalSMS + ", noOfStdSMS=" + noOfStdSMS
+				+ ", noOfLocalCalls=" + noOfLocalCalls + ", noOfStdCalls=" + noOfStdCalls + ", internetDataUsageUnits="
+				+ internetDataUsageUnits + ", billMonth=" + billMonth + ", totalBillAmount=" + totalBillAmount
+				+ ", localSMSAmount=" + localSMSAmount + ", stdSMSAmount=" + stdSMSAmount + ", localCallAmount="
+				+ localCallAmount + ", stdCallAmount=" + stdCallAmount + ", internetDataUsageAmount="
+				+ internetDataUsageAmount + ", gst=" + gst + "]";
 	}
 }

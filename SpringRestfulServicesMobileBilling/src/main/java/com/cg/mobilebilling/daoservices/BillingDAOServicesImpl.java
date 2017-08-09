@@ -1,13 +1,10 @@
 package com.cg.mobilebilling.daoservices;
 
 import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-
 import org.springframework.stereotype.Repository;
-
 import com.cg.mobilebilling.beans.Bill;
 import com.cg.mobilebilling.beans.Customer;
 import com.cg.mobilebilling.beans.Plan;
@@ -63,26 +60,40 @@ public class BillingDAOServicesImpl implements BillingDAOServices {
 
 	@Override
 	public boolean deletePostPaidAccount(int customerID, long mobileNo) {
-		// TODO Auto-generated method stub
-		return false;
+		PostpaidAccount account= em.find(PostpaidAccount.class, mobileNo);
+		if(account!=null) {
+			em.remove(account);
+			return true;
+		}else {
+			return false;
+		}
 	}
 
 	@Override
 	public Bill getMonthlyBill(int customerID, long mobileNo, String billMonth) {
-		// TODO Auto-generated method stub
-		return null;
+		String query= "select b from Bill b where b.postpaidaccount.mobileNo=:mobileNo and b.billMonth=:billMonth";
+		TypedQuery<Bill> qry= em.createQuery(query, Bill.class);
+		qry.setParameter("mobileNo", mobileNo);
+		qry.setParameter("billMonth", billMonth);
+		Bill bill= qry.getSingleResult();
+		System.out.println(bill.getGst());
+		return bill;
 	}
 
 	@Override
 	public List<Bill> getCustomerPostPaidAccountAllBills(int customerID, long mobileNo) {
-		// TODO Auto-generated method stub
-		return null;
+		String query= "select b from Bill b where b.postpaidaccount.mobileNo=:mobileNo";
+		TypedQuery<Bill> qry= em.createQuery(query, Bill.class);
+		qry.setParameter("mobileNo", mobileNo);
+		return qry.getResultList();
 	}
 
 	@Override
 	public List<PostpaidAccount> getCustomerPostPaidAccounts(int customerID) {
-		// TODO Auto-generated method stub
-		return null;
+		String query= "select p from PostpaidAccount p where p.customer.customerID=:customerID";
+		TypedQuery<PostpaidAccount> qry= em.createQuery(query, PostpaidAccount.class);
+		qry.setParameter("customerID", customerID);
+		return qry.getResultList();
 	}
 
 	@Override
@@ -128,7 +139,6 @@ public class BillingDAOServicesImpl implements BillingDAOServices {
 
 	@Override
 	public Plan insertPlan(Plan plan) throws PlanDetailsNotFoundException {
-		// TODO Auto-generated method stub
 		em.persist(plan);
 		em.flush();
 		return plan;

@@ -120,4 +120,14 @@ public class Plan {
 	public void setPlanName(String planName) {
 		this.planName = planName;
 	}
+
+	@Override
+	public String toString() {
+		return "Plan [planID=" + planID + ", monthlyRental=" + monthlyRental + ", freeLocalCalls=" + freeLocalCalls
+				+ ", freeStdCalls=" + freeStdCalls + ", freeLocalSMS=" + freeLocalSMS + ", freeStdSMS=" + freeStdSMS
+				+ ", freeInternetDataUsageUnits=" + freeInternetDataUsageUnits + ", localCallRate=" + localCallRate
+				+ ", stdCallRate=" + stdCallRate + ", localSMSRate=" + localSMSRate + ", stdSMSRate=" + stdSMSRate
+				+ ", internetDataUsageRate=" + internetDataUsageRate + ", planCircle=" + planCircle + ", planName="
+				+ planName + "]";
+	}
 }

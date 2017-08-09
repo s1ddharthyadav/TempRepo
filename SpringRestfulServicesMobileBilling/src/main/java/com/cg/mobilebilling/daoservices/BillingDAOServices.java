@@ -1,6 +1,6 @@
 package com.cg.mobilebilling.daoservices;
-import java.util.List;
 
+import java.util.List;
 import com.cg.mobilebilling.beans.Bill;
 import com.cg.mobilebilling.beans.Customer;
 import com.cg.mobilebilling.beans.Plan;
@@ -8,6 +8,8 @@ import com.cg.mobilebilling.beans.PostpaidAccount;
 import com.cg.mobilebilling.beans.StandardPlan;
 import com.cg.mobilebilling.exceptions.BillingServicesDownException;
 import com.cg.mobilebilling.exceptions.PlanDetailsNotFoundException;
+import com.cg.mobilebilling.exceptions.PostpaidAccountNotFoundException;
+
 public interface BillingDAOServices {
 	Customer insertCustomer(Customer customer) throws BillingServicesDownException ;
 	long insertPostPaidAccount(int customerID, PostpaidAccount account);
@@ -15,7 +17,7 @@ public interface BillingDAOServices {
 	Bill insertMonthlybill(int customerID, long mobileNo, Bill bill);
 	StandardPlan insertPlan(StandardPlan plan) throws PlanDetailsNotFoundException;
 	Plan insertPlan(Plan plan) throws PlanDetailsNotFoundException;
-	boolean deletePostPaidAccount(int customerID, long mobileNo);
+	boolean deletePostPaidAccount(int customerID, long mobileNo) throws PostpaidAccountNotFoundException;
 	Bill getMonthlyBill(int customerID, long mobileNo, String billMonth);
 	List<Bill> getCustomerPostPaidAccountAllBills(int customerID, long mobileNo);
 	List<PostpaidAccount> getCustomerPostPaidAccounts(int customerID);
