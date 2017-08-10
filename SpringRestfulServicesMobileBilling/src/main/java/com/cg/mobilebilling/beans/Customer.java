@@ -16,7 +16,7 @@ import javax.persistence.OneToMany;
 public class Customer {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.TABLE)
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int customerID;
 	private String firstName, lastName, emailID, dateOfBirth,password;
 	
@@ -41,6 +41,12 @@ public class Customer {
 		this.password = password;
 		this.address = address;
 		this.postpaidAccounts = postpaidAccounts;
+	}
+	
+
+	public Customer(int customerID) {
+		super();
+		this.customerID = customerID;
 	}
 
 	public int getCustomerID() {

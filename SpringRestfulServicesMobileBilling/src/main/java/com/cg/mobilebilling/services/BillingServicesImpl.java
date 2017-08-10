@@ -19,22 +19,20 @@ import com.cg.mobilebilling.exceptions.PlanDetailsNotFoundException;
 import com.cg.mobilebilling.exceptions.PostpaidAccountNotFoundException;
 
 @Service
-@Transactional/* (noRollbackFor=Exception.class)*/
+@Transactional
 public class BillingServicesImpl implements BillingServices {
 
 	@Autowired
 	BillingDAOServices dao;
 
 	@Override
-	public List<Plan> getPlanAllDetails() throws BillingServicesDownException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<StandardPlan> getPlanAllDetails() throws BillingServicesDownException {
+		return dao.getAllPlans();
 	}
 
 	@Override
 	public Customer acceptCustomerDetails(Customer customer) throws BillingServicesDownException {
 		return dao.insertCustomer(customer);
-
 	}
 
 	@Override
@@ -44,17 +42,19 @@ public class BillingServicesImpl implements BillingServices {
 		StandardPlan sPlan= dao.getsPlan(planID);
 		Plan plan= new Plan(sPlan.getPlanID(), sPlan.getMonthlyRental(), sPlan.getFreeLocalCalls(), sPlan.getFreeStdCalls(), sPlan.getFreeLocalSMS(), sPlan.getFreeStdSMS(), sPlan.getFreeInternetDataUsageUnits(), sPlan.getLocalCallRate(), sPlan.getStdCallRate(), sPlan.getLocalSMSRate(), sPlan.getStdSMSRate(), sPlan.getInternetDataUsageRate(),sPlan.getPlanCircle(), sPlan.getPlanName());
 		PostpaidAccount account = new PostpaidAccount();
+		long mobNo= generateUniqueMobileNo();
+		account.setMobileNo(mobNo);
 		account.setPlan(plan);
 		return dao.insertPostPaidAccount(customerID, account);
 	}
 
 	@Override
-	public Bill generateMonthlyMobileBill(int customerID, long mobileNo, String billMonth, int noOfLocalSMS,
+	public Bill generateMonthlyMobileBill(long mobileNo, String billMonth, int noOfLocalSMS,
 			int noOfStdSMS, int noOfLocalCalls, int noOfStdCalls, int internetDataUsageUnits)
 					throws CustomerDetailsNotFoundException, PostpaidAccountNotFoundException, InvalidBillMonthException,
 					BillingServicesDownException, PlanDetailsNotFoundException
 	{	
-		PostpaidAccount p= dao.getPlanDetails(customerID, mobileNo);
+		PostpaidAccount p= dao.getPlanDetails(mobileNo);
 		int BillednoOfLocalSMS = (noOfLocalSMS-p.getPlan().getFreeLocalSMS());
 		int BillednoOfStdSMS = (noOfStdSMS-p.getPlan().getFreeStdSMS());
 		int BillednoOfLocalCalls = (noOfLocalCalls-p.getPlan().getFreeLocalCalls());
@@ -71,83 +71,93 @@ public class BillingServicesImpl implements BillingServices {
 		float TotalBillAmount= Amount+gstAmount;
 
 		Bill bill=new Bill(BillednoOfLocalSMS, BillednoOfStdSMS, BillednoOfLocalCalls, BillednoOfStdCalls, internetDataUsageUnits, billMonth, TotalBillAmount, LocalSMSAmount, StdSMSAmount, localCallAmount, StdCallAmount, internetAmount, gstAmount);
-		return dao.insertMonthlybill(customerID, mobileNo, bill);
+		return dao.insertMonthlybill(mobileNo, bill);
 	}
 
 	@Override
 	public Customer getCustomerDetails(int customerID)
 			throws CustomerDetailsNotFoundException, BillingServicesDownException {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.getCustomer(customerID);
 	}
 
 	@Override
 	public List<Customer> getAllCustomerDetails() throws BillingServicesDownException {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.getAllCustomers();
 	}
 
 	@Override
 	public PostpaidAccount getPostPaidAccountDetails(int customerID, long mobileNo)
 			throws CustomerDetailsNotFoundException, PostpaidAccountNotFoundException, BillingServicesDownException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<PostpaidAccount> getCustomerAllPostpaidAccountsDetails(int customerID)
 			throws CustomerDetailsNotFoundException, BillingServicesDownException {
-		// TODO Auto-generated method stub
 		return dao.getCustomerPostPaidAccounts(customerID);
 	}
 
 	@Override
-	public Bill getMobileBillDetails(int customerID, long mobileNo, String billMonth)
+	public Bill getMobileBillDetails(long mobileNo, String billMonth)
 			throws CustomerDetailsNotFoundException, PostpaidAccountNotFoundException, InvalidBillMonthException,
 			BillDetailsNotFoundException, BillingServicesDownException {
-		return dao.getMonthlyBill(customerID, mobileNo, billMonth);
+		return dao.getMonthlyBill(mobileNo, billMonth);
 	}
 
 	@Override
-	public List<Bill> getCustomerPostPaidAccountAllBillDetails(int customerID, long mobileNo)
+	public List<Bill> getCustomerPostPaidAccountAllBillDetails(long mobileNo)
 			throws CustomerDetailsNotFoundException, PostpaidAccountNotFoundException, BillingServicesDownException,
 			BillDetailsNotFoundException {
-		return dao.getCustomerPostPaidAccountAllBills(customerID, mobileNo);
+		return dao.getCustomerPostPaidAccountAllBills(mobileNo);
 	}
 
 	@Override
-	public boolean changePlan(int customerID, long mobileNo, int planID) throws CustomerDetailsNotFoundException,
+	public PostpaidAccount changePlan(int customerID, long mobileNo, int planID) throws CustomerDetailsNotFoundException,
 	PostpaidAccountNotFoundException, PlanDetailsNotFoundException, BillingServicesDownException {
-		// TODO Auto-generated method stub
-		return false;
+		StandardPlan sPlan= dao.getsPlan(planID);
+		Plan plan= new Plan(sPlan.getPlanID(), sPlan.getMonthlyRental(), sPlan.getFreeLocalCalls(), sPlan.getFreeStdCalls(), sPlan.getFreeLocalSMS(), sPlan.getFreeStdSMS(), sPlan.getFreeInternetDataUsageUnits(), sPlan.getLocalCallRate(), sPlan.getStdCallRate(), sPlan.getLocalSMSRate(), sPlan.getStdSMSRate(), sPlan.getInternetDataUsageRate(),sPlan.getPlanCircle(), sPlan.getPlanName());
+		PostpaidAccount account = new PostpaidAccount();
+		Customer cust=new Customer(customerID);
+		account.setCustomer(cust);
+		account.setMobileNo(mobileNo);
+		account.setPlan(plan);
+		return dao.updatePostPaidAccount(account);
 	}
 
 	@Override
-	public boolean closeCustomerPostPaidAccount(int customerID, long mobileNo)
+	public boolean closeCustomerPostPaidAccount(long mobileNo)
 			throws CustomerDetailsNotFoundException, PostpaidAccountNotFoundException, BillingServicesDownException {
-		
-		return dao.deletePostPaidAccount(customerID, mobileNo);
+		return dao.deletePostPaidAccount(mobileNo);
 	}
 
 	@Override
 	public boolean deleteCustomer(int customerID)
 			throws BillingServicesDownException, CustomerDetailsNotFoundException {
-		dao.deleteCustomer(customerID);
-		return false;
+		return dao.deleteCustomer(customerID);
 	}
 
 	@Override
-	public Plan getCustomerPostPaidAccountPlanDetails(int customerID, long mobileNo)
+	public PostpaidAccount getCustomerPostPaidAccountPlanDetails(int customerID, long mobileNo)
 			throws CustomerDetailsNotFoundException, PostpaidAccountNotFoundException, BillingServicesDownException,
 			PlanDetailsNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.getCustomerPostPaidAccount(customerID, mobileNo);
 	}
 
 	@Override
 	public StandardPlan insertPlan(StandardPlan plan) throws PlanDetailsNotFoundException {
-		// TODO Auto-generated method stub
 		return dao.insertPlan(plan);
 	}
 
+	@Override
+	public StandardPlan getsPlan(int planID) {
+		return dao.getsPlan(planID);
+	}
+	
+	public long generateUniqueMobileNo() {
+		long tempMobNo= (long) (Math.random()*1000000000);
+		String var= "9000000000";
+		long var1= Long.parseLong(var);
+		long genMobNo= tempMobNo+var1;		
+		return genMobNo;
+	}
 }

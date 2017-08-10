@@ -37,13 +37,13 @@ public class BillingDAOServicesImpl implements BillingDAOServices {
 	}
 
 	@Override
-	public boolean updatePostPaidAccount(int customerID, PostpaidAccount account) {
-		// TODO Auto-generated method stub
-		return false;
+	public PostpaidAccount updatePostPaidAccount(PostpaidAccount account) {
+		PostpaidAccount accnt=em.merge(account);
+		return accnt;
 	}
 
 	@Override
-	public Bill insertMonthlybill(int customerID, long mobileNo, Bill bill) {
+	public Bill insertMonthlybill(long mobileNo, Bill bill) {
 		PostpaidAccount postpaid=em.find(PostpaidAccount.class, mobileNo);
 		bill.setPostpaidaccount(postpaid);
 		em.persist(bill);
@@ -59,7 +59,7 @@ public class BillingDAOServicesImpl implements BillingDAOServices {
 	}
 
 	@Override
-	public boolean deletePostPaidAccount(int customerID, long mobileNo) {
+	public boolean deletePostPaidAccount(long mobileNo) {
 		PostpaidAccount account= em.find(PostpaidAccount.class, mobileNo);
 		if(account!=null) {
 			em.remove(account);
@@ -70,7 +70,7 @@ public class BillingDAOServicesImpl implements BillingDAOServices {
 	}
 
 	@Override
-	public Bill getMonthlyBill(int customerID, long mobileNo, String billMonth) {
+	public Bill getMonthlyBill(long mobileNo, String billMonth) {
 		String query= "select b from Bill b where b.postpaidaccount.mobileNo=:mobileNo and b.billMonth=:billMonth";
 		TypedQuery<Bill> qry= em.createQuery(query, Bill.class);
 		qry.setParameter("mobileNo", mobileNo);
@@ -81,7 +81,7 @@ public class BillingDAOServicesImpl implements BillingDAOServices {
 	}
 
 	@Override
-	public List<Bill> getCustomerPostPaidAccountAllBills(int customerID, long mobileNo) {
+	public List<Bill> getCustomerPostPaidAccountAllBills(long mobileNo) {
 		String query= "select b from Bill b where b.postpaidaccount.mobileNo=:mobileNo";
 		TypedQuery<Bill> qry= em.createQuery(query, Bill.class);
 		qry.setParameter("mobileNo", mobileNo);
@@ -109,9 +109,9 @@ public class BillingDAOServicesImpl implements BillingDAOServices {
 	}
 
 	@Override
-	public List<Plan> getAllPlans() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<StandardPlan> getAllPlans() {
+		TypedQuery<StandardPlan> query = em.createQuery("select p from StandardPlan p",StandardPlan.class);
+		return query.getResultList(); 
 	}
 
 	@Override
@@ -122,19 +122,27 @@ public class BillingDAOServicesImpl implements BillingDAOServices {
 
 	@Override
 	public PostpaidAccount getCustomerPostPaidAccount(int customerID, long mobileNo) {
-		// TODO Auto-generated method stub
-		return null;
+		String query= "select p from PostpaidAccount p where p.customer.customerID=:customerID and p.mobileNo=:mobileNo";
+		TypedQuery<PostpaidAccount> qry= em.createQuery(query, PostpaidAccount.class);
+		qry.setParameter("customerID", customerID);
+		qry.setParameter("mobileNo", mobileNo);
+		return qry.getSingleResult();
 	}
 
-	public PostpaidAccount getPlanDetails(int customerID, long mobileNo) {
+	public PostpaidAccount getPlanDetails(long mobileNo) {
 		PostpaidAccount plan=em.find(PostpaidAccount.class, mobileNo);
 		return plan;
 	}
 
 	@Override
 	public boolean deleteCustomer(int customerID) {
-		em.remove(getCustomer(customerID));
-		return true;
+		Customer customer = em.find(Customer.class,customerID);
+		if(customer!=null) {
+			em.remove(customer);
+			return true;
+		}else {
+			return false;		
+		}
 	}
 
 	@Override
