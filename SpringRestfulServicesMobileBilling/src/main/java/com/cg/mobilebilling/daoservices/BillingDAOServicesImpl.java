@@ -28,8 +28,7 @@ public class BillingDAOServicesImpl implements BillingDAOServices {
 	}
 
 	@Override
-	public long insertPostPaidAccount(int customerID, PostpaidAccount account) {
-		Customer customer=em.find(Customer.class,customerID);
+	public long insertPostPaidAccount(Customer customer, PostpaidAccount account) {
 		account.setCustomer(customer);
 		em.persist(account);
 		customer.setPostpaidAccounts(account);
@@ -129,9 +128,9 @@ public class BillingDAOServicesImpl implements BillingDAOServices {
 		return qry.getSingleResult();
 	}
 
-	public PostpaidAccount getPlanDetails(long mobileNo) {
-		PostpaidAccount plan=em.find(PostpaidAccount.class, mobileNo);
-		return plan;
+	public PostpaidAccount getPostpaidAccountPlanDetails(long mobileNo) {
+		PostpaidAccount account=em.find(PostpaidAccount.class, mobileNo);
+		return account;
 	}
 
 	@Override

@@ -34,7 +34,6 @@ public class MobileBillingController {
 
 
 	public MobileBillingController(){
-		System.out.println("Mobile Billing Controller");
 	}
 
 	@RequestMapping(value="/acceptCustomerDetail",method=RequestMethod.POST,consumes=MediaType.APPLICATION_FORM_URLENCODED_VALUE)
@@ -51,7 +50,7 @@ public class MobileBillingController {
 
 	@RequestMapping(value="/insertPostpaidPlan",method=RequestMethod.POST,consumes=MediaType.ALL_VALUE)
 	public ResponseEntity<String>insertPostpaidPlanDetail(@RequestParam("customerID")int customerID, @RequestParam("planID") int planID) throws PlanDetailsNotFoundException, CustomerDetailsNotFoundException, BillingServicesDownException{
-		long mobNo= services.openPostpaidMobileAccount(customerID, planID);
+		long mobNo = services.openPostpaidMobileAccount(customerID, planID);
 		return new ResponseEntity<>("Postpaid account details succesfully added. Mobile Number is: "+mobNo+".",HttpStatus.OK);
 	}
 

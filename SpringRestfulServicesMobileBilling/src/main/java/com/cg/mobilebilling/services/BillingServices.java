@@ -34,11 +34,6 @@ public interface BillingServices {
 	
 	List<Customer> getAllCustomerDetails() throws BillingServicesDownException;
 	
-	PostpaidAccount getPostPaidAccountDetails(int customerID, long mobileNo) 
-			throws CustomerDetailsNotFoundException, 
-			PostpaidAccountNotFoundException, 
-			BillingServicesDownException;
-	
 	List<PostpaidAccount> getCustomerAllPostpaidAccountsDetails(int customerID)
 			throws CustomerDetailsNotFoundException, BillingServicesDownException;
 	
@@ -65,5 +60,5 @@ public interface BillingServices {
 			throws CustomerDetailsNotFoundException, PostpaidAccountNotFoundException, 
 			BillingServicesDownException, PlanDetailsNotFoundException ;
 	
-	StandardPlan getsPlan(int planID) ;
+	StandardPlan getsPlan(int planID) throws PlanDetailsNotFoundException ;
 }
