@@ -13,10 +13,18 @@
 	<dependencies>
 
 		<!-- Junit Dependency -->
+		
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.12</version>
+			<version>4.4</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.9.5</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -31,8 +39,9 @@
 			<artifactId>wadl-client-plugin</artifactId>
 			<version>1.1.6</version>
 		</dependency>
+		
 		<!-- Spring MVC support -->
-
+		
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>

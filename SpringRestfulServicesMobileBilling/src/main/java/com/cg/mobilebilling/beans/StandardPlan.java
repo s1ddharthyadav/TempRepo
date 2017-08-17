@@ -36,6 +36,10 @@ public class StandardPlan {
 		this.planName = planName;
 	}
 
+	public StandardPlan(int i) {
+		// TODO Auto-generated constructor stub
+	}
+
 	public int getPlanID() {
 		return planID;
 	}
@@ -146,5 +150,72 @@ public class StandardPlan {
 
 	public void setPlanName(String planName) {
 		this.planName = planName;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + freeInternetDataUsageUnits;
+		result = prime * result + freeLocalCalls;
+		result = prime * result + freeLocalSMS;
+		result = prime * result + freeStdCalls;
+		result = prime * result + freeStdSMS;
+		result = prime * result + Float.floatToIntBits(internetDataUsageRate);
+		result = prime * result + Float.floatToIntBits(localCallRate);
+		result = prime * result + Float.floatToIntBits(localSMSRate);
+		result = prime * result + monthlyRental;
+		result = prime * result + ((planCircle == null) ? 0 : planCircle.hashCode());
+		result = prime * result + planID;
+		result = prime * result + ((planName == null) ? 0 : planName.hashCode());
+		result = prime * result + Float.floatToIntBits(stdCallRate);
+		result = prime * result + Float.floatToIntBits(stdSMSRate);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		StandardPlan other = (StandardPlan) obj;
+		if (freeInternetDataUsageUnits != other.freeInternetDataUsageUnits)
+			return false;
+		if (freeLocalCalls != other.freeLocalCalls)
+			return false;
+		if (freeLocalSMS != other.freeLocalSMS)
+			return false;
+		if (freeStdCalls != other.freeStdCalls)
+			return false;
+		if (freeStdSMS != other.freeStdSMS)
+			return false;
+		if (Float.floatToIntBits(internetDataUsageRate) != Float.floatToIntBits(other.internetDataUsageRate))
+			return false;
+		if (Float.floatToIntBits(localCallRate) != Float.floatToIntBits(other.localCallRate))
+			return false;
+		if (Float.floatToIntBits(localSMSRate) != Float.floatToIntBits(other.localSMSRate))
+			return false;
+		if (monthlyRental != other.monthlyRental)
+			return false;
+		if (planCircle == null) {
+			if (other.planCircle != null)
+				return false;
+		} else if (!planCircle.equals(other.planCircle))
+			return false;
+		if (planID != other.planID)
+			return false;
+		if (planName == null) {
+			if (other.planName != null)
+				return false;
+		} else if (!planName.equals(other.planName))
+			return false;
+		if (Float.floatToIntBits(stdCallRate) != Float.floatToIntBits(other.stdCallRate))
+			return false;
+		if (Float.floatToIntBits(stdSMSRate) != Float.floatToIntBits(other.stdSMSRate))
+			return false;
+		return true;
 	}
 }

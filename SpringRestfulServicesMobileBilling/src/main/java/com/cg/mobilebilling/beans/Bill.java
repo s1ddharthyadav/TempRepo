@@ -28,6 +28,26 @@ public class Bill {
 		super();
 	}
 
+	public Bill(int billID, int noOfLocalSMS, int noOfStdSMS, int noOfLocalCalls, int noOfStdCalls,
+			int internetDataUsageUnits, String billMonth, float totalBillAmount, float localSMSAmount,
+			float stdSMSAmount, float localCallAmount, float stdCallAmount, float internetDataUsageAmount, float gst) {
+		super();
+		this.billID = billID;
+		this.noOfLocalSMS = noOfLocalSMS;
+		this.noOfStdSMS = noOfStdSMS;
+		this.noOfLocalCalls = noOfLocalCalls;
+		this.noOfStdCalls = noOfStdCalls;
+		this.internetDataUsageUnits = internetDataUsageUnits;
+		this.billMonth = billMonth;
+		this.totalBillAmount = totalBillAmount;
+		this.localSMSAmount = localSMSAmount;
+		this.stdSMSAmount = stdSMSAmount;
+		this.localCallAmount = localCallAmount;
+		this.stdCallAmount = stdCallAmount;
+		this.internetDataUsageAmount = internetDataUsageAmount;
+		this.gst = gst;
+	}
+
 	public Bill(int noOfLocalSMS, int noOfStdSMS, int noOfLocalCalls, int noOfStdCalls,
 			int internetDataUsageUnits, String billMonth, float totalBillAmount, float localSMSAmount,
 			float stdSMSAmount, float localCallAmount, float stdCallAmount, float internetDataUsageAmount,
@@ -48,8 +68,6 @@ public class Bill {
 		this.gst=gst;
 		this.postpaidaccount = postpaidaccount;
 	}
-	
-	
 
 	public Bill(int noOfLocalSMS, int noOfStdSMS, int noOfLocalCalls, int noOfStdCalls,
 			int internetDataUsageUnits, String billMonth, float totalBillAmount, float localSMSAmount,
@@ -68,6 +86,10 @@ public class Bill {
 		this.stdCallAmount = stdCallAmount;
 		this.internetDataUsageAmount = internetDataUsageAmount;
 		this.gst = gst;
+	}
+
+	public Bill(int i) {
+		// TODO Auto-generated constructor stub
 	}
 
 	public int getBillID() {
@@ -199,4 +221,76 @@ public class Bill {
 				+ localCallAmount + ", stdCallAmount=" + stdCallAmount + ", internetDataUsageAmount="
 				+ internetDataUsageAmount + ", gst=" + gst + "]";
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + billID;
+		result = prime * result + ((billMonth == null) ? 0 : billMonth.hashCode());
+		result = prime * result + Float.floatToIntBits(gst);
+		result = prime * result + Float.floatToIntBits(internetDataUsageAmount);
+		result = prime * result + internetDataUsageUnits;
+		result = prime * result + Float.floatToIntBits(localCallAmount);
+		result = prime * result + Float.floatToIntBits(localSMSAmount);
+		result = prime * result + noOfLocalCalls;
+		result = prime * result + noOfLocalSMS;
+		result = prime * result + noOfStdCalls;
+		result = prime * result + noOfStdSMS;
+		result = prime * result + ((postpaidaccount == null) ? 0 : postpaidaccount.hashCode());
+		result = prime * result + Float.floatToIntBits(stdCallAmount);
+		result = prime * result + Float.floatToIntBits(stdSMSAmount);
+		result = prime * result + Float.floatToIntBits(totalBillAmount);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Bill other = (Bill) obj;
+		if (billID != other.billID)
+			return false;
+		if (billMonth == null) {
+			if (other.billMonth != null)
+				return false;
+		} else if (!billMonth.equals(other.billMonth))
+			return false;
+		if (Float.floatToIntBits(gst) != Float.floatToIntBits(other.gst))
+			return false;
+		if (Float.floatToIntBits(internetDataUsageAmount) != Float.floatToIntBits(other.internetDataUsageAmount))
+			return false;
+		if (internetDataUsageUnits != other.internetDataUsageUnits)
+			return false;
+		if (Float.floatToIntBits(localCallAmount) != Float.floatToIntBits(other.localCallAmount))
+			return false;
+		if (Float.floatToIntBits(localSMSAmount) != Float.floatToIntBits(other.localSMSAmount))
+			return false;
+		if (noOfLocalCalls != other.noOfLocalCalls)
+			return false;
+		if (noOfLocalSMS != other.noOfLocalSMS)
+			return false;
+		if (noOfStdCalls != other.noOfStdCalls)
+			return false;
+		if (noOfStdSMS != other.noOfStdSMS)
+			return false;
+		if (postpaidaccount == null) {
+			if (other.postpaidaccount != null)
+				return false;
+		} else if (!postpaidaccount.equals(other.postpaidaccount))
+			return false;
+		if (Float.floatToIntBits(stdCallAmount) != Float.floatToIntBits(other.stdCallAmount))
+			return false;
+		if (Float.floatToIntBits(stdSMSAmount) != Float.floatToIntBits(other.stdSMSAmount))
+			return false;
+		if (Float.floatToIntBits(totalBillAmount) != Float.floatToIntBits(other.totalBillAmount))
+			return false;
+		return true;
+	}
+	
+	
 }

@@ -34,6 +34,7 @@ public class MobileBillingController {
 
 
 	public MobileBillingController(){
+		System.out.println("Mobile Controller");
 	}
 
 	@RequestMapping(value="/acceptCustomerDetail",method=RequestMethod.POST,consumes=MediaType.APPLICATION_FORM_URLENCODED_VALUE)
@@ -80,7 +81,7 @@ public class MobileBillingController {
 	}
 
 	@RequestMapping(value="/deleteCustomerPostpaidAccount/{mobileNo}",method=RequestMethod.DELETE)
-	public ResponseEntity<String>deleteCustomerPostpaidAccount(@PathVariable("mobileNo")int mobileNo)throws CustomerDetailsNotFoundException, BillingServicesDownException, PostpaidAccountNotFoundException{
+	public ResponseEntity<String>deleteCustomerPostpaidAccount(@PathVariable("mobileNo")long mobileNo)throws CustomerDetailsNotFoundException, BillingServicesDownException, PostpaidAccountNotFoundException{
 		boolean customer = services.closeCustomerPostPaidAccount(mobileNo);
 		if(customer==false)throw new CustomerDetailsNotFoundException("Postpaid Account not found for mobile number"+mobileNo);
 		return new ResponseEntity<>("Postpaid Account Details details succesfully deleted",HttpStatus.OK);

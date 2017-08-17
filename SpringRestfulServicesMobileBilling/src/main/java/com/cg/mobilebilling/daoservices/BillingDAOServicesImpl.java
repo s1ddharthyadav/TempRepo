@@ -13,7 +13,6 @@ import com.cg.mobilebilling.beans.StandardPlan;
 import com.cg.mobilebilling.exceptions.BillingServicesDownException;
 import com.cg.mobilebilling.exceptions.PlanDetailsNotFoundException;
 
-
 @Repository
 public class BillingDAOServicesImpl implements BillingDAOServices {
 
@@ -128,9 +127,13 @@ public class BillingDAOServicesImpl implements BillingDAOServices {
 		return qry.getSingleResult();
 	}
 
-	public PostpaidAccount getPostpaidAccountPlanDetails(long mobileNo) {
-		PostpaidAccount account=em.find(PostpaidAccount.class, mobileNo);
-		return account;
+	public PostpaidAccount getPostpaidAccountDetails(long mobileNo) {
+		/*String query= "select p from PostpaidAccount p where p.mobileNo=:mobileNo";
+		TypedQuery<PostpaidAccount> qry= em.createQuery(query, PostpaidAccount.class);
+		qry.setParameter("mobileNo", mobileNo);
+		return qry.getSingleResult();*/
+		return em.find(PostpaidAccount.class, mobileNo);
+		
 	}
 
 	@Override

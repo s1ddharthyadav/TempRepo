@@ -28,6 +28,6 @@ public interface BillingDAOServices {
 	StandardPlan getsPlan(int planID) ;
 	Plan getPlan(int planID) ;
 	PostpaidAccount getCustomerPostPaidAccount(int customerID, long mobileNo);
-	PostpaidAccount getPostpaidAccountPlanDetails(long mobileNo);
+	PostpaidAccount getPostpaidAccountDetails(long mobileNo);
 	boolean deleteCustomer(int customerID);
 }

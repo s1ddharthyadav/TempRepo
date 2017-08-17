@@ -41,6 +41,10 @@ public class PostpaidAccount {
 		this.bills = bills;
 	}
 	
+
+	public PostpaidAccount(int i) {
+	}
+
 	public long getMobileNo() {
 		return mobileNo;
 	}
@@ -82,4 +86,46 @@ public class PostpaidAccount {
 	public String toString() {
 		return "PostpaidAccount [mobileNo=" + mobileNo + ", plan=" + plan + "]";
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((bills == null) ? 0 : bills.hashCode());
+		result = prime * result + ((customer == null) ? 0 : customer.hashCode());
+		result = prime * result + (int) (mobileNo ^ (mobileNo >>> 32));
+		result = prime * result + ((plan == null) ? 0 : plan.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PostpaidAccount other = (PostpaidAccount) obj;
+		if (bills == null) {
+			if (other.bills != null)
+				return false;
+		} else if (!bills.equals(other.bills))
+			return false;
+		if (customer == null) {
+			if (other.customer != null)
+				return false;
+		} else if (!customer.equals(other.customer))
+			return false;
+		if (mobileNo != other.mobileNo)
+			return false;
+		if (plan == null) {
+			if (other.plan != null)
+				return false;
+		} else if (!plan.equals(other.plan))
+			return false;
+		return true;
+	}
+	
+	
 }

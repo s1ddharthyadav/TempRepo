@@ -61,4 +61,6 @@ public interface BillingServices {
 			BillingServicesDownException, PlanDetailsNotFoundException ;
 	
 	StandardPlan getsPlan(int planID) throws PlanDetailsNotFoundException ;
+
+	long generateUniqueMobileNo();
 }
