@@ -87,11 +87,7 @@ public class MobileBillingTest {
 		Mockito.when(billingServices.openPostpaidMobileAccount(6, 199)).thenReturn(9866146526l);
 		Mockito.when(billingDaoServices.insertCustomer(customerTemp)).thenReturn(customerTemp);
 		Mockito.when(billingServices.acceptCustomerDetails(customerTemp)).thenReturn(customerTemp);
-	
-		//Mockito.verify(billingDaoServices);
 	}
-	
-	
 	
     @Test
 	public void getPlanAllDetailsForValidData() throws BillingServicesDownException {
@@ -105,7 +101,6 @@ public class MobileBillingTest {
 		
 		Customer customer1= new Customer(6, "Hodor", "Gupta", "tyagi@hodor.com", "15-05-1999", "hodor", new Address(225256, "Gazia", "up"));
 		Customer expectedCustomer=customer1;
-		//Customer customer=new Customer(6);
 		Customer actualCustomer=billingServices.acceptCustomerDetails(customer1);
 		assertEquals(expectedCustomer, actualCustomer);
 	}
@@ -130,7 +125,6 @@ public class MobileBillingTest {
 	@Test 
 	public void generateMonthlyBillForValidData() throws CustomerDetailsNotFoundException, PostpaidAccountNotFoundException, InvalidBillMonthException, BillingServicesDownException, PlanDetailsNotFoundException {
 
-		
 		Bill billTemp= new Bill(21, 3610, 5013, 81910, 5578,
 				434234, "July", 4077582.5f, 21660f,
 				30078f , 491460f, 33468f, 2559936f , 940980.6f);

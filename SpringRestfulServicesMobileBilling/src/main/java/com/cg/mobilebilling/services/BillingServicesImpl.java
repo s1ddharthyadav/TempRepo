@@ -2,9 +2,10 @@ package com.cg.mobilebilling.services;
 
 import java.util.List;
 
-import org.jvnet.hk2.annotations.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.cg.mobilebilling.beans.Bill;
 import com.cg.mobilebilling.beans.Customer;
 import com.cg.mobilebilling.beans.Plan;
@@ -22,7 +23,6 @@ import com.cg.mobilebilling.exceptions.PostpaidAccountNotFoundException;
 @Transactional
 public class BillingServicesImpl implements BillingServices {
 
-	/*private static final Exception CustomerDetailsNotFoundException = null;*/
 	@Autowired
 	BillingDAOServices dao;
 
@@ -32,6 +32,7 @@ public class BillingServicesImpl implements BillingServices {
 	}
 
 	public BillingServicesImpl() {
+		System.out.println("BillingServicesImpl()");
 	}
 
 	@Override
@@ -109,10 +110,6 @@ public class BillingServicesImpl implements BillingServices {
 	public Bill getMobileBillDetails(long mobileNo, String billMonth)
 			throws CustomerDetailsNotFoundException, PostpaidAccountNotFoundException, InvalidBillMonthException,
 			BillDetailsNotFoundException, BillingServicesDownException {
-		/*PostpaidAccount account= dao.getPostpaidAccountDetails(mobileNo);
-		if(account==null) throw new PostpaidAccountNotFoundException("Postpaid Account not fount for mobile number "+mobileNo);
-		Bill bill= dao.getMonthlyBill(mobileNo, billMonth);
-		if(bill==null) throw new InvalidBillMonthException("No bill exists for "+billMonth+" month");*/
 		return dao.getMonthlyBill(mobileNo, billMonth);
 	}
 
@@ -129,22 +126,17 @@ public class BillingServicesImpl implements BillingServices {
 	@Override
 	public PostpaidAccount changePlan(int customerID, long mobileNo, int planID) throws CustomerDetailsNotFoundException,
 	PostpaidAccountNotFoundException, PlanDetailsNotFoundException, BillingServicesDownException {
-		System.out.println(planID);
 		StandardPlan sPlan= dao.getsPlan(planID);
 		if(sPlan==null) throw new PlanDetailsNotFoundException("Plan Details for Plan ID "+planID+" not found");
-		System.out.println(planID+" "+mobileNo+" "+customerID);
 		PostpaidAccount acc= dao.getPostpaidAccountDetails(mobileNo);
 		if(acc==null) throw new PostpaidAccountNotFoundException("No postpaid account found");
 		Plan plan= new Plan(sPlan.getPlanID(), sPlan.getMonthlyRental(), sPlan.getFreeLocalCalls(), sPlan.getFreeStdCalls(), sPlan.getFreeLocalSMS(), sPlan.getFreeStdSMS(), sPlan.getFreeInternetDataUsageUnits(), sPlan.getLocalCallRate(), sPlan.getStdCallRate(), sPlan.getLocalSMSRate(), sPlan.getStdSMSRate(), sPlan.getInternetDataUsageRate(),sPlan.getPlanCircle(), sPlan.getPlanName());
 		PostpaidAccount account = new PostpaidAccount();
 		Customer cust=getCustomerDetails(customerID);
-		System.out.println(cust);
 		account.setCustomer(cust);
 		account.setMobileNo(mobileNo);
 		account.setPlan(plan);
-		System.out.println(account);
 		PostpaidAccount accnt= dao.updatePostPaidAccount(account);
-		System.out.println(accnt);
 		return accnt;
 	}
 

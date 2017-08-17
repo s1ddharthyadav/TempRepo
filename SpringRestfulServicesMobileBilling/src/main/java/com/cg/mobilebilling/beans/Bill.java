@@ -7,10 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-
 @Entity
-
-
 public class Bill {
 
 	@Id
@@ -291,6 +288,4 @@ public class Bill {
 			return false;
 		return true;
 	}
-	
-	
 }

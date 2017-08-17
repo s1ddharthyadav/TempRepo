@@ -40,7 +40,6 @@ public class PostpaidAccount {
 		this.plan = plan;
 		this.bills = bills;
 	}
-	
 
 	public PostpaidAccount(int i) {
 	}
@@ -126,6 +125,4 @@ public class PostpaidAccount {
 			return false;
 		return true;
 	}
-	
-	
 }

@@ -128,10 +128,6 @@ public class BillingDAOServicesImpl implements BillingDAOServices {
 	}
 
 	public PostpaidAccount getPostpaidAccountDetails(long mobileNo) {
-		/*String query= "select p from PostpaidAccount p where p.mobileNo=:mobileNo";
-		TypedQuery<PostpaidAccount> qry= em.createQuery(query, PostpaidAccount.class);
-		qry.setParameter("mobileNo", mobileNo);
-		return qry.getSingleResult();*/
 		return em.find(PostpaidAccount.class, mobileNo);
 		
 	}
