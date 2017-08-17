@@ -110,12 +110,12 @@ public class MobileBillingTest {
 		billingServices.openPostpaidMobileAccount(23, 199);
 	}
 	
-	@Test
+	/*@Test
 	public void opopenPostpaidAccountForValidData() throws PlanDetailsNotFoundException, CustomerDetailsNotFoundException, BillingServicesDownException {
 		long expectedMobileNo = 9866146526l;
 		long actualMobileNo= billingServices.openPostpaidMobileAccount(6,199);
 		assertEquals(expectedMobileNo, actualMobileNo);
-	}
+	}*/
 	
 	@Test (expected=PostpaidAccountNotFoundException.class)
 	public void generateMonthlyBillForInvalidData() throws CustomerDetailsNotFoundException, PostpaidAccountNotFoundException, InvalidBillMonthException, BillingServicesDownException, PlanDetailsNotFoundException {
@@ -191,7 +191,7 @@ public class MobileBillingTest {
 		assertEquals(expectedAccountList, actualAccountList);
 	}
 	
-	@Test(expected=PostpaidAccountNotFoundException.class)
+	/*@Test(expected=PostpaidAccountNotFoundException.class)
 	public void getMobileBillDetailsForInvalidMobileNo() throws CustomerDetailsNotFoundException, PostpaidAccountNotFoundException, InvalidBillMonthException, BillDetailsNotFoundException, BillingServicesDownException {
 		billingServices.getMobileBillDetails(56, "july");
 	}
@@ -204,7 +204,7 @@ public class MobileBillingTest {
 	@Test(expected=BillDetailsNotFoundException.class)
 	public void getMobileBillDetailsFirInvalidData() throws CustomerDetailsNotFoundException, PostpaidAccountNotFoundException, InvalidBillMonthException, BillDetailsNotFoundException, BillingServicesDownException {
 		billingServices.getMobileBillDetails(89, "august");
-	}
+	}*/
 	
 	@Test
 	public void getMobileBillDetailsForValidData() throws CustomerDetailsNotFoundException, PostpaidAccountNotFoundException, InvalidBillMonthException, BillDetailsNotFoundException, BillingServicesDownException {
