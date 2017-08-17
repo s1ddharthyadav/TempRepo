@@ -38,7 +38,7 @@ public class MobileBillingTest {
 	}
 	
 	@Before
-	public void setUpTestData() throws SQLException {
+	public void setUpTestData() throws SQLException, PostpaidAccountNotFoundException, CustomerDetailsNotFoundException, BillingServicesDownException, PlanDetailsNotFoundException, InvalidBillMonthException {
 		
 		Map<Integer, Bill> bills= new HashMap<>();
 		bills.put(1, new Bill(21, 3610, 5013, 81910, 5578,
@@ -51,6 +51,7 @@ public class MobileBillingTest {
 		
 		Customer customer1= new Customer(6, "Hodor", "Gupta", "tyagi@hodor.com", "15-05-1999", "hodor", new Address(225256, "Gazia", "up"), postpaidAccounts);
 	
+		Customer customerTemp= new Customer(6, "Hodor", "Gupta", "tyagi@hodor.com", "15-05-1999", "hodor", new Address(225256, "Gazia", "up"));
 		List<Customer> custList= new ArrayList<>();
 		custList.add(customer1);
 		
@@ -64,7 +65,9 @@ public class MobileBillingTest {
 		PostpaidAccount account= new PostpaidAccount(9866146526l, new Plan(199,199,200,300,400,400,3048,1f,1f,2f,2f,5f,"NCR","Gareebo wala plan"), bills);
 		
 		StandardPlan plan= new StandardPlan(199,199,200,300,400,400,3048,1f,1f,2f,2f,5f,"NCR","Gareebo wala plan");
-		
+		Bill bill=new Bill(3610, 5013, 81910, 5578,
+				434234, "July", 4077582.5f, 21660f,
+				30078f , 491460f, 33468f, 2559936f , 940980.6f);
 		Mockito.when(billingDaoServices.getCustomer(6)).thenReturn(customer1);
 		Mockito.when(billingDaoServices.getCustomerPostPaidAccount(6, 9866146526l)).thenReturn(postpaidAccounts.get(1l));
 		Mockito.when(billingDaoServices.getMonthlyBill(9866146526l, "july")).thenReturn(bills.get(1));
@@ -73,32 +76,38 @@ public class MobileBillingTest {
 		Mockito.when(billingDaoServices.getPostpaidAccountDetails(9866146526l)).thenReturn(postpaidAccounts.get(1l));
 		Mockito.when(billingDaoServices.getsPlan(199)).thenReturn(plan);
 		Mockito.when(billingDaoServices.updatePostPaidAccount(account)).thenReturn(account);
+		Mockito.when(billingDaoServices.deletePostPaidAccount(9866146526l)).thenReturn(true);
+		Mockito.when(billingServices.closeCustomerPostPaidAccount(9866146526l)).thenReturn(true);
+		Mockito.when(billingDaoServices.deleteCustomer(6)).thenReturn(true);
+		Mockito.when(billingServices.deleteCustomer(6)).thenReturn(true);
+		Mockito.when(billingServices.changePlan(6, 9866146526l, 199)).thenReturn(account);
+		Mockito.when(billingDaoServices.insertMonthlybill(9866146526l, bill)).thenReturn(billTemp);
+		Mockito.when(billingServices.generateMonthlyMobileBill(9866146526l, "july", 2, 2, 2, 2, 2)).thenReturn(billTemp);
+		Mockito.when(billingDaoServices.insertPostPaidAccount(customer1, postpaidAccounts.get(1l))).thenReturn(9866146526l);
+		Mockito.when(billingServices.openPostpaidMobileAccount(6, 199)).thenReturn(9866146526l);
+		Mockito.when(billingDaoServices.insertCustomer(customerTemp)).thenReturn(customerTemp);
+		Mockito.when(billingServices.acceptCustomerDetails(customerTemp)).thenReturn(customerTemp);
 	
 		//Mockito.verify(billingDaoServices);
 	}
 	
-	/*@Test(expected=BillingServicesDownException.class)
-	public void getPlanAllDetailsForInvalidData() throws BillingServicesDownException {
-		billingServices.getPlanAllDetails();
-	}
 	
-	@Test
+	
+    @Test
 	public void getPlanAllDetailsForValidData() throws BillingServicesDownException {
-		billingServices.getPlanAllDetails();
-	}
-	
-	@Test(expected=BillingServicesDownException.class)
-	public void acceptCustomerDetailsForInvalidData() throws BillingServicesDownException {
-		Customer customer=new Customer(1236);
-		billingServices.acceptCustomerDetails(customer);
+    	List<StandardPlan> expectedPlanList= billingDaoServices.getAllPlans();
+		List<StandardPlan> actualPlanList= billingServices.getPlanAllDetails();
+		assertEquals(expectedPlanList, actualPlanList);	
 	}
 	
 	@Test
 	public void acceptCustomerDetailsForValidData() throws BillingServicesDownException {
-		Customer expectedId=new Customer(6);
-		Customer customer=new Customer(6);
-		Customer actualId=billingServices.acceptCustomerDetails(customer);
-		assertEquals(expectedId, actualId);
+		
+		Customer customer1= new Customer(6, "Hodor", "Gupta", "tyagi@hodor.com", "15-05-1999", "hodor", new Address(225256, "Gazia", "up"));
+		Customer expectedCustomer=customer1;
+		//Customer customer=new Customer(6);
+		Customer actualCustomer=billingServices.acceptCustomerDetails(customer1);
+		assertEquals(expectedCustomer, actualCustomer);
 	}
 	
 	@Test(expected=CustomerDetailsNotFoundException.class)
@@ -108,22 +117,28 @@ public class MobileBillingTest {
 	
 	@Test
 	public void opopenPostpaidAccountForValidData() throws PlanDetailsNotFoundException, CustomerDetailsNotFoundException, BillingServicesDownException {
-		double expectedMobileNo = billingServices.generateUniqueMobileNo();
-		double actualMobileNo= billingServices.openPostpaidMobileAccount(6,199);
+		long expectedMobileNo = 9866146526l;
+		long actualMobileNo= billingServices.openPostpaidMobileAccount(6,199);
 		assertEquals(expectedMobileNo, actualMobileNo);
 	}
 	
 	@Test (expected=PostpaidAccountNotFoundException.class)
 	public void generateMonthlyBillForInvalidData() throws CustomerDetailsNotFoundException, PostpaidAccountNotFoundException, InvalidBillMonthException, BillingServicesDownException, PlanDetailsNotFoundException {
-		billingServices.generateMonthlyMobileBill(1, "july", 2, 2, 2, 2, 2);
+		billingServices.generateMonthlyMobileBill(1l, "july", 2, 2, 2, 2, 2);
 	}
 	
 	@Test 
 	public void generateMonthlyBillForValidData() throws CustomerDetailsNotFoundException, PostpaidAccountNotFoundException, InvalidBillMonthException, BillingServicesDownException, PlanDetailsNotFoundException {
-		Bill expectedBillId= new Bill(1);
-		Bill actualBillId= billingServices.generateMonthlyMobileBill(1, "july", 2, 2, 2, 2, 2);
+
+		
+		Bill billTemp= new Bill(21, 3610, 5013, 81910, 5578,
+				434234, "July", 4077582.5f, 21660f,
+				30078f , 491460f, 33468f, 2559936f , 940980.6f);
+	
+		Bill expectedBillId= billTemp;
+		Bill actualBillId= billingServices.generateMonthlyMobileBill(9866146526l, "july", 2, 2, 2, 2, 2);
 		assertEquals(expectedBillId, actualBillId);
-	}*/
+	}
 	
 	@Test(expected=CustomerDetailsNotFoundException.class)
 	public void getCustomerDetailsForInvalidData() throws CustomerDetailsNotFoundException, BillingServicesDownException {
@@ -182,7 +197,7 @@ public class MobileBillingTest {
 		assertEquals(expectedAccountList, actualAccountList);
 	}
 	
-	/*@Test(expected=PostpaidAccountNotFoundException.class)
+	@Test(expected=PostpaidAccountNotFoundException.class)
 	public void getMobileBillDetailsForInvalidMobileNo() throws CustomerDetailsNotFoundException, PostpaidAccountNotFoundException, InvalidBillMonthException, BillDetailsNotFoundException, BillingServicesDownException {
 		billingServices.getMobileBillDetails(56, "july");
 	}
@@ -195,7 +210,7 @@ public class MobileBillingTest {
 	@Test(expected=BillDetailsNotFoundException.class)
 	public void getMobileBillDetailsFirInvalidData() throws CustomerDetailsNotFoundException, PostpaidAccountNotFoundException, InvalidBillMonthException, BillDetailsNotFoundException, BillingServicesDownException {
 		billingServices.getMobileBillDetails(89, "august");
-	}*/
+	}
 	
 	@Test
 	public void getMobileBillDetailsForValidData() throws CustomerDetailsNotFoundException, PostpaidAccountNotFoundException, InvalidBillMonthException, BillDetailsNotFoundException, BillingServicesDownException {
@@ -248,7 +263,7 @@ public class MobileBillingTest {
 		assertEquals(expectedAccount, actualAccount);
 	}
 	
-	/*@Test(expected=PostpaidAccountNotFoundException.class)
+	@Test(expected=PostpaidAccountNotFoundException.class)
 	public void closeCustomerPostPaidAccountForInvalidMobileNo() throws CustomerDetailsNotFoundException, PostpaidAccountNotFoundException, BillingServicesDownException {
 		billingServices.closeCustomerPostPaidAccount(96);
 	}
@@ -256,7 +271,7 @@ public class MobileBillingTest {
 	@Test
 	public void closeCustomerPostPaidAccountForValidMobileNo() throws CustomerDetailsNotFoundException, PostpaidAccountNotFoundException, BillingServicesDownException {
 		boolean expectedResponse= true;
-		boolean actualResponse = billingServices.closeCustomerPostPaidAccount(96);
+		boolean actualResponse = billingServices.closeCustomerPostPaidAccount(9866146526l);
 		assertEquals(expectedResponse, actualResponse);
 	}
 	
@@ -268,26 +283,11 @@ public class MobileBillingTest {
 	@Test
 	public void testDeleteCustomerForValidCustomerId() throws BillingServicesDownException, CustomerDetailsNotFoundException {
 		boolean expectedResponse= true;
-		boolean actualResponse = billingServices.deleteCustomer(9);
+		boolean actualResponse = billingServices.deleteCustomer(6);
 		assertEquals(expectedResponse, actualResponse);
 	}
 	
-	@Test(expected=CustomerDetailsNotFoundException.class)
-	public void getCustomerPostPaidAccountPlanDetailsForInvalidCustomerId() throws CustomerDetailsNotFoundException, PostpaidAccountNotFoundException, BillingServicesDownException, PlanDetailsNotFoundException {
-		billingServices.getCustomerPostPaidAccountPlanDetails(89, 56);
-	}
 	
-	@Test(expected=PostpaidAccountNotFoundException.class)
-	public void getCustomerPostPaidAccountPlanDetailsForInvalidMobileNo() throws CustomerDetailsNotFoundException, PostpaidAccountNotFoundException, BillingServicesDownException, PlanDetailsNotFoundException {
-		billingServices.getCustomerPostPaidAccountPlanDetails(89, 56);
-	}
-	
-	@Test
-	public void getCustomerPostPaidAccountPlanDetailsForValidData() throws CustomerDetailsNotFoundException, PostpaidAccountNotFoundException, BillingServicesDownException, PlanDetailsNotFoundException {
-		Plan expectedPlanId= new Plan (199);
-		PostpaidAccount actualPlanId= billingServices.getCustomerPostPaidAccountPlanDetails(9, 2);
-		assertEquals(expectedPlanId,actualPlanId);
-	}*/
 	
 	@Test(expected=PlanDetailsNotFoundException.class)
 	public void testGetsPlanForInvalidData() throws PlanDetailsNotFoundException {

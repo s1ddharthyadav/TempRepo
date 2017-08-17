@@ -55,6 +55,7 @@ public class BillingServicesImpl implements BillingServices {
 		account.setMobileNo(mobNo);
 		account.setPlan(plan);
 		Customer customer= getCustomerDetails(customerID);
+		if (customer==null) throw new CustomerDetailsNotFoundException("customer not found");
 		return dao.insertPostPaidAccount(customer, account);
 	}
 
@@ -150,12 +151,16 @@ public class BillingServicesImpl implements BillingServices {
 	@Override
 	public boolean closeCustomerPostPaidAccount(long mobileNo)
 			throws CustomerDetailsNotFoundException, PostpaidAccountNotFoundException, BillingServicesDownException {
+		PostpaidAccount acc= dao.getPostpaidAccountDetails(mobileNo);
+		if(acc==null) throw new PostpaidAccountNotFoundException("No postpaid account found");
 		return dao.deletePostPaidAccount(mobileNo);
 	}
 
 	@Override
 	public boolean deleteCustomer(int customerID)
 			throws BillingServicesDownException, CustomerDetailsNotFoundException {
+		Customer cust=getCustomerDetails(customerID);
+		if(cust==null)throw new CustomerDetailsNotFoundException("cutomer not found");
 		return dao.deleteCustomer(customerID);
 	}
 
